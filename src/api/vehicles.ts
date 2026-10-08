@@ -19,3 +19,11 @@ export function getVehicleRepairOrders(licensePlate: string): Promise<RepairOrde
     `/vehicles/${encodeURIComponent(licensePlate)}/repair-orders`,
   )
 }
+
+export function vehicleQueryKey(licensePlate: string) {
+  return ['vehicles', licensePlate] as const
+}
+
+export function vehicleRepairOrdersQueryKey(licensePlate: string) {
+  return ['vehicles', licensePlate, 'repair-orders'] as const
+}

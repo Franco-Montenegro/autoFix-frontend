@@ -18,7 +18,12 @@ import {
 } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { getVehicle, getVehicleRepairOrders } from '../../api/vehicles'
+import {
+  getVehicle,
+  getVehicleRepairOrders,
+  vehicleQueryKey,
+  vehicleRepairOrdersQueryKey,
+} from '../../api/vehicles'
 import { ErrorAlert } from '../../components/ErrorAlert'
 import { Loading } from '../../components/Loading'
 import { PageHeader } from '../../components/PageHeader'
@@ -61,7 +66,7 @@ function VehicleCard({ vehicle }: { vehicle: VehicleResponse }) {
 function RepairOrderHistory({ licensePlate }: { licensePlate: string }) {
   const navigate = useNavigate()
   const { data, isPending, error } = useQuery({
-    queryKey: ['vehicles', licensePlate, 'repair-orders'],
+    queryKey: vehicleRepairOrdersQueryKey(licensePlate),
     queryFn: () => getVehicleRepairOrders(licensePlate),
   })
 
@@ -115,7 +120,7 @@ function RepairOrderHistory({ licensePlate }: { licensePlate: string }) {
 export function VehicleDetailPage() {
   const { plate = '' } = useParams()
   const { data: vehicle, isPending, error } = useQuery({
-    queryKey: ['vehicles', plate],
+    queryKey: vehicleQueryKey(plate),
     queryFn: () => getVehicle(plate),
   })
 

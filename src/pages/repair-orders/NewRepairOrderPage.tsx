@@ -16,9 +16,9 @@ import {
   Typography,
 } from '@mui/material'
 import { ApiError } from '../../api/ApiError'
-import { createRepairOrder } from '../../api/repairOrders'
+import { createRepairOrder, repairOrderQueryKey } from '../../api/repairOrders'
 import { getRepairTypes } from '../../api/repairTypes'
-import { getVehicles } from '../../api/vehicles'
+import { getVehicles, vehicleRepairOrdersQueryKey } from '../../api/vehicles'
 import { ErrorAlert } from '../../components/ErrorAlert'
 import { Loading } from '../../components/Loading'
 import { PageHeader } from '../../components/PageHeader'
@@ -57,9 +57,9 @@ function RepairOrderForm({ vehicles, repairTypes, initialPlate }: RepairOrderFor
   const mutation = useMutation({
     mutationFn: createRepairOrder,
     onSuccess: async (order) => {
-      queryClient.setQueryData(['repair-orders', String(order.id)], order)
+      queryClient.setQueryData(repairOrderQueryKey(order.id), order)
       await queryClient.invalidateQueries({
-        queryKey: ['vehicles', order.licensePlate, 'repair-orders'],
+        queryKey: vehicleRepairOrdersQueryKey(order.licensePlate),
       })
       notify(`Ingreso N.º ${order.id} registrado`)
       void navigate(`/repair-orders/${order.id}`)

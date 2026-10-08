@@ -19,7 +19,13 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import BuildCircleIcon from '@mui/icons-material/BuildCircle'
 import CarRepairIcon from '@mui/icons-material/CarRepair'
-import { getRepairOrder, registerPickup, registerReady } from '../../api/repairOrders'
+import {
+  getRepairOrder,
+  registerPickup,
+  registerReady,
+  repairOrderQueryKey,
+} from '../../api/repairOrders'
+import { vehicleRepairOrdersQueryKey } from '../../api/vehicles'
 import { DateTimeDialog } from '../../components/DateTimeDialog'
 import { ErrorAlert } from '../../components/ErrorAlert'
 import { Loading } from '../../components/Loading'
@@ -27,6 +33,8 @@ import { RepairOrderStatusChip } from '../../components/RepairOrderStatusChip'
 import { useNotify } from '../../components/notifications/useNotify'
 import type { RepairOrderResponse } from '../../types/repairOrder'
 import { formatCLP, formatDateTime, formatMileage } from '../../utils/format'
+import { BonusCard } from './BonusCard'
+import { CostCard } from './CostCard'
 
 type StatusAction = 'ready' | 'pickup'
 
@@ -121,7 +129,7 @@ export function RepairOrderDetailPage() {
   const [action, setAction] = useState<StatusAction | null>(null)
 
   const { data: order, isPending, error } = useQuery({
-    queryKey: ['repair-orders', id],
+    queryKey: repairOrderQueryKey(id),
     queryFn: () => getRepairOrder(id),
   })
 
@@ -129,9 +137,9 @@ export function RepairOrderDetailPage() {
     mutationFn: ({ kind, dateTime }: { kind: StatusAction; dateTime: string }) =>
       ACTIONS[kind].run(Number(id), dateTime),
     onSuccess: async (updated, { kind }) => {
-      queryClient.setQueryData(['repair-orders', id], updated)
+      queryClient.setQueryData(repairOrderQueryKey(id), updated)
       await queryClient.invalidateQueries({
-        queryKey: ['vehicles', updated.licensePlate, 'repair-orders'],
+        queryKey: vehicleRepairOrdersQueryKey(updated.licensePlate),
       })
       notify(ACTIONS[kind].success)
       setAction(null)
@@ -185,10 +193,25 @@ export function RepairOrderDetailPage() {
             )}
           </Box>
           <OrderSummary order={order} />
-          <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-            Reparaciones
-          </Typography>
-          <OrderItems order={order} />
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', lg: '3fr 2fr' },
+              gap: 3,
+              alignItems: 'start',
+            }}
+          >
+            <Box>
+              <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+                Reparaciones
+              </Typography>
+              <OrderItems order={order} />
+            </Box>
+            <Box>
+              <BonusCard order={order} />
+              {order.status === 'DELIVERED' && <CostCard order={order} />}
+            </Box>
+          </Box>
         </>
       )}
 
