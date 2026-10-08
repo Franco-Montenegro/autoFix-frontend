@@ -4,6 +4,7 @@ import BuildIcon from '@mui/icons-material/Build'
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import ListAltIcon from '@mui/icons-material/ListAlt'
+import TimerIcon from '@mui/icons-material/Timer'
 import type { Role } from '../auth/roles'
 
 export interface NavItem {
@@ -33,7 +34,7 @@ export const NAV_SECTIONS: NavSection[] = [
     items: [
       { label: 'R1: Ingresos y costos', path: '/reports/r1', icon: <AssessmentIcon /> },
       { label: 'R2: Por tipo de vehículo', path: '/reports/r2', icon: <AssessmentIcon />, role: 'ADMIN' },
-      { label: 'R3: Tiempos de reparación', path: '/reports/r3', icon: <AssessmentIcon />, role: 'ADMIN' },
+      { label: 'R3: Tiempos de reparación', path: '/reports/r3', icon: <TimerIcon />, role: 'ADMIN' },
       { label: 'R4: Por tipo de motor', path: '/reports/r4', icon: <AssessmentIcon />, role: 'ADMIN' },
     ],
   },

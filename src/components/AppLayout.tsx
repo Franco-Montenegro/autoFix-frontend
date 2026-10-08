@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router'
+import { NavLink, Outlet, useLocation } from 'react-router'
 import {
   AppBar,
   Box,
@@ -26,7 +26,13 @@ const DRAWER_WIDTH = 260
 /** Barra superior con el usuario y "Cerrar sesión", y menú lateral según rol. */
 export function AppLayout() {
   const { username, hasRole, logout } = useAuth()
+  const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Al pasar de un reporte a otro se conserva el rango de fechas (?from=…&to=…).
+  const onReport = location.pathname.startsWith('/reports/')
+  const linkTo = (path: string) =>
+    onReport && path.startsWith('/reports/') ? `${path}${location.search}` : path
 
   const menu = (
     <>
@@ -43,7 +49,7 @@ export function AppLayout() {
               <ListItemButton
                 key={item.path}
                 component={NavLink}
-                to={item.path}
+                to={linkTo(item.path)}
                 onClick={() => setMobileOpen(false)}
                 sx={{ '&.active': { bgcolor: 'action.selected' } }}
               >

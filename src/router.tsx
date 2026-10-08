@@ -5,6 +5,10 @@ import { ComingSoonPage } from './components/ComingSoonPage'
 import { BonusesPage } from './pages/bonuses/BonusesPage'
 import { NewRepairOrderPage } from './pages/repair-orders/NewRepairOrderPage'
 import { RepairOrderDetailPage } from './pages/repair-orders/RepairOrderDetailPage'
+import { R1Page } from './pages/reports/R1Page'
+import { R2Page } from './pages/reports/R2Page'
+import { R3Page } from './pages/reports/R3Page'
+import { R4Page } from './pages/reports/R4Page'
 import { RepairTypesPage } from './pages/repair-types/RepairTypesPage'
 import { VehicleDetailPage } from './pages/vehicles/VehicleDetailPage'
 import { VehiclesPage } from './pages/vehicles/VehiclesPage'
@@ -20,7 +24,7 @@ export const router = createBrowserRouter([
       { path: 'repair-orders/new', element: <NewRepairOrderPage /> },
       { path: 'repair-orders/:id', element: <RepairOrderDetailPage /> },
       { path: 'bonuses', element: <BonusesPage /> },
-      { path: 'reports/r1', element: <ComingSoonPage title="R1: Ingresos y costos" /> },
+      { path: 'reports/r1', element: <R1Page /> },
       {
         element: (
           <RequireRole role="ADMIN">
@@ -28,9 +32,9 @@ export const router = createBrowserRouter([
           </RequireRole>
         ),
         children: [
-          { path: 'reports/r2', element: <ComingSoonPage title="R2: Por tipo de vehículo" /> },
-          { path: 'reports/r3', element: <ComingSoonPage title="R3: Tiempos de reparación" /> },
-          { path: 'reports/r4', element: <ComingSoonPage title="R4: Por tipo de motor" /> },
+          { path: 'reports/r2', element: <R2Page /> },
+          { path: 'reports/r3', element: <R3Page /> },
+          { path: 'reports/r4', element: <R4Page /> },
         ],
       },
       { path: '*', element: <ComingSoonPage title="Página no encontrada" /> },

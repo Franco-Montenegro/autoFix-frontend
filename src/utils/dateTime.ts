@@ -11,6 +11,18 @@ export function nowForInput(): string {
   )
 }
 
+/** Rango del mes actual completo en formato `yyyy-MM-dd` (el de los reportes). */
+export function currentMonthRange(): { from: string; to: string } {
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = now.getMonth() + 1
+  const lastDay = new Date(year, month, 0).getDate()
+  return {
+    from: `${year}-${pad(month)}-01`,
+    to: `${year}-${pad(month)}-${pad(lastDay)}`,
+  }
+}
+
 /** Año y mes (1–12) de una fecha ISO-8601 sin zona horaria, ej. "2026-09-28T10:00:00". */
 export function yearMonthOf(isoDateTime: string): { year: number; month: number } {
   return { year: Number(isoDateTime.slice(0, 4)), month: Number(isoDateTime.slice(5, 7)) }
