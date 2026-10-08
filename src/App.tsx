@@ -3,6 +3,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { RouterProvider } from 'react-router'
 import { queryClient } from './api/queryClient'
 import { AuthProvider } from './auth/AuthProvider'
+import { NotificationProvider } from './components/notifications/NotificationProvider'
 import { router } from './router'
 import { theme } from './theme'
 
@@ -12,7 +13,9 @@ export function App() {
       <CssBaseline />
       <AuthProvider>
         <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
+          <NotificationProvider>
+            <RouterProvider router={router} />
+          </NotificationProvider>
         </QueryClientProvider>
       </AuthProvider>
     </ThemeProvider>

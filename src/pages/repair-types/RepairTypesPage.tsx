@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import {
-  Box,
-  CircularProgress,
   Paper,
   Table,
   TableBody,
@@ -13,6 +11,7 @@ import {
 } from '@mui/material'
 import { getRepairTypes } from '../../api/repairTypes'
 import { ErrorAlert } from '../../components/ErrorAlert'
+import { Loading } from '../../components/Loading'
 import { PageHeader } from '../../components/PageHeader'
 import type { EngineType } from '../../types/enums'
 import type { RepairType } from '../../types/repairType'
@@ -35,11 +34,7 @@ export function RepairTypesPage() {
   return (
     <>
       <PageHeader title="Catálogo de reparaciones" />
-      {isPending && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-          <CircularProgress />
-        </Box>
-      )}
+      {isPending && <Loading />}
       {error && <ErrorAlert error={error} />}
       {data && (
         <TableContainer component={Paper}>

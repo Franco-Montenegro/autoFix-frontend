@@ -3,14 +3,17 @@ import { RequireRole } from './auth/RequireRole'
 import { AppLayout } from './components/AppLayout'
 import { ComingSoonPage } from './components/ComingSoonPage'
 import { RepairTypesPage } from './pages/repair-types/RepairTypesPage'
+import { VehicleDetailPage } from './pages/vehicles/VehicleDetailPage'
+import { VehiclesPage } from './pages/vehicles/VehiclesPage'
 
 export const router = createBrowserRouter([
   {
     element: <AppLayout />,
     children: [
-      { index: true, element: <Navigate to="/repair-types" replace /> },
+      { index: true, element: <Navigate to="/vehicles" replace /> },
       { path: 'repair-types', element: <RepairTypesPage /> },
-      { path: 'vehicles', element: <ComingSoonPage title="Vehículos" /> },
+      { path: 'vehicles', element: <VehiclesPage /> },
+      { path: 'vehicles/:plate', element: <VehicleDetailPage /> },
       { path: 'repair-orders/new', element: <ComingSoonPage title="Nuevo ingreso" /> },
       { path: 'bonuses', element: <ComingSoonPage title="Bonos" /> },
       { path: 'reports/r1', element: <ComingSoonPage title="R1: Ingresos y costos" /> },
