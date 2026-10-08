@@ -1,0 +1,14 @@
+# Seguridad de la cadena de suministro (ver docs/plan.md, Fase 9)
+
+# Guardar dependencias con versión exacta (sin ^ ni ~)
+savePrefix: ''
+
+# No instalar versiones publicadas hace menos de 7 días (en minutos)
+minimumReleaseAge: 10080
+minimumReleaseAgeStrict: true
+
+# Scripts de instalación bloqueados: la instalación falla si un paquete
+# trae scripts sin revisar. Se autorizan de forma nominal en allowBuilds.
+strictDepBuilds: true
+dangerouslyAllowAllBuilds: false
+allowBuilds: {}
