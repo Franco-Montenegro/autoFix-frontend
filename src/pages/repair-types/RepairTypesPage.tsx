@@ -7,23 +7,17 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material'
 import { getRepairTypes } from '../../api/repairTypes'
 import { ErrorAlert } from '../../components/ErrorAlert'
 import { Loading } from '../../components/Loading'
 import { PageHeader } from '../../components/PageHeader'
+import { RepairPrice } from '../../components/RepairPrice'
 import type { EngineType } from '../../types/enums'
-import type { RepairType } from '../../types/repairType'
-import { formatCLP } from '../../utils/format'
 import { ENGINE_TYPE_LABELS } from '../../utils/labels'
+import { priceForEngine } from '../../utils/repairTypes'
 
-const PRICE_COLUMNS: { engine: EngineType; price: (repair: RepairType) => number }[] = [
-  { engine: 'GASOLINE', price: (repair) => repair.priceGasoline },
-  { engine: 'DIESEL', price: (repair) => repair.priceDiesel },
-  { engine: 'HYBRID', price: (repair) => repair.priceHybrid },
-  { engine: 'ELECTRIC', price: (repair) => repair.priceElectric },
-]
+const ENGINES = Object.keys(ENGINE_TYPE_LABELS) as EngineType[]
 
 export function RepairTypesPage() {
   const { data, isPending, error } = useQuery({
@@ -42,7 +36,7 @@ export function RepairTypesPage() {
             <TableHead>
               <TableRow>
                 <TableCell>Reparación</TableCell>
-                {PRICE_COLUMNS.map(({ engine }) => (
+                {ENGINES.map((engine) => (
                   <TableCell key={engine} align="right">
                     {ENGINE_TYPE_LABELS[engine]}
                   </TableCell>
@@ -53,15 +47,9 @@ export function RepairTypesPage() {
               {data.map((repair) => (
                 <TableRow key={repair.id} hover>
                   <TableCell>{repair.name}</TableCell>
-                  {PRICE_COLUMNS.map(({ engine, price }) => (
+                  {ENGINES.map((engine) => (
                     <TableCell key={engine} align="right">
-                      {price(repair) === 0 ? (
-                        <Typography variant="body2" color="text.disabled">
-                          No aplica
-                        </Typography>
-                      ) : (
-                        formatCLP(price(repair))
-                      )}
+                      <RepairPrice price={priceForEngine(repair, engine)} />
                     </TableCell>
                   ))}
                 </TableRow>

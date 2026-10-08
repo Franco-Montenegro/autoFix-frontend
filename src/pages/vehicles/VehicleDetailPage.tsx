@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link as RouterLink, useParams } from 'react-router'
+import { Link as RouterLink, useNavigate, useParams } from 'react-router'
 import {
   Alert,
   Box,
   Button,
   Card,
   CardContent,
+  Link,
   Paper,
   Table,
   TableBody,
@@ -15,6 +16,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { getVehicle, getVehicleRepairOrders } from '../../api/vehicles'
 import { ErrorAlert } from '../../components/ErrorAlert'
@@ -57,6 +59,7 @@ function VehicleCard({ vehicle }: { vehicle: VehicleResponse }) {
 }
 
 function RepairOrderHistory({ licensePlate }: { licensePlate: string }) {
+  const navigate = useNavigate()
   const { data, isPending, error } = useQuery({
     queryKey: ['vehicles', licensePlate, 'repair-orders'],
     queryFn: () => getVehicleRepairOrders(licensePlate),
@@ -83,8 +86,17 @@ function RepairOrderHistory({ licensePlate }: { licensePlate: string }) {
         </TableHead>
         <TableBody>
           {data.map((order) => (
-            <TableRow key={order.id}>
-              <TableCell>{order.id}</TableCell>
+            <TableRow
+              key={order.id}
+              hover
+              onClick={() => void navigate(`/repair-orders/${order.id}`)}
+              sx={{ cursor: 'pointer' }}
+            >
+              <TableCell>
+                <Link component={RouterLink} to={`/repair-orders/${order.id}`}>
+                  {order.id}
+                </Link>
+              </TableCell>
               <TableCell>{formatDateTime(order.entryDateTime)}</TableCell>
               <TableCell align="right">{formatMileage(order.mileage)}</TableCell>
               <TableCell>
@@ -118,9 +130,19 @@ export function VehicleDetailPage() {
         <>
           <PageHeader title={`Vehículo ${vehicle.licensePlate}`} />
           <VehicleCard vehicle={vehicle} />
-          <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-            Historial de ingresos
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+            <Typography variant="h6" component="h2" sx={{ flexGrow: 1 }}>
+              Historial de ingresos
+            </Typography>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              component={RouterLink}
+              to={`/repair-orders/new?plate=${encodeURIComponent(vehicle.licensePlate)}`}
+            >
+              Nuevo ingreso
+            </Button>
+          </Box>
           <RepairOrderHistory licensePlate={vehicle.licensePlate} />
         </>
       )}

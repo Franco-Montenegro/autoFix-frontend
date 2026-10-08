@@ -27,6 +27,20 @@ export interface RepairOrderCost {
   totalAmount: number
 }
 
+export interface CreateRepairOrderRequest {
+  licensePlate: string
+  /** Fecha y hora ISO-8601 sin zona horaria. */
+  entryDateTime: string
+  mileage: number
+  repairTypeIds: number[]
+}
+
+/** Body de los registros de salida y de retiro. */
+export interface RepairOrderDateTimeRequest {
+  /** Fecha y hora ISO-8601 sin zona horaria. */
+  dateTime: string
+}
+
 export interface RepairOrderResponse {
   id: number
   licensePlate: string
